@@ -15,10 +15,6 @@ MainWindow::MainWindow(int updateRate, QWidget *parent):
     chart_.legend()->hide();
     chart_.addSeries(&series_);
 
-
-
-    //ui->graphicsView->setScene(&scene);
-
     // Fonctions de connections events/slots
     connectTimers(updateRate);
     connectButtons();

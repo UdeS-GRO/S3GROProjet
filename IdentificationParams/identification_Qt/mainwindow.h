@@ -28,8 +28,6 @@ class MainWindow : public QMainWindow
     Q_OBJECT
 
 public:
-    int TIMEOUT_MS = 100;
-    int DEFAULT_UPDATE_RATE = 1000;
     const qint32 BAUD_RATE = 115200;
 
     explicit MainWindow(int updateRate, QWidget *parent = nullptr);
