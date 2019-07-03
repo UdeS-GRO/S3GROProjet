@@ -78,10 +78,10 @@ void setup() {
   
   // Initialisation du PID
   pid_.setGains(0.25,0.1 ,0);
-    // Attache des fonctions de retour
-    pid_.setMeasurementFunc(PIDmeasurement);
-    pid_.setCommandFunc(PIDcommand);
-    pid_.setAtGoalFunc(PIDgoalReached);
+  // Attache des fonctions de retour
+  pid_.setMeasurementFunc(PIDmeasurement);
+  pid_.setCommandFunc(PIDcommand);
+  pid_.setAtGoalFunc(PIDgoalReached);
   pid_.setEpsilon(0.001);
   pid_.setPeriod(200);
 }
@@ -118,16 +118,16 @@ void startPulse(){
   timerPulse_.setDelay(pulseTime_);
   timerPulse_.enable();
   timerPulse_.setRepetition(1);
-  //AX_.setMotorPWM(0, pulsePWM_);
-  //AX_.setMotorPWM(1, pulsePWM_);
+  AX_.setMotorPWM(0, pulsePWM_);
+  AX_.setMotorPWM(1, pulsePWM_);
   shouldPulse_ = false;
   isInPulse_ = true;
 }
 
 void endPulse(){
   /* Rappel du chronometre */
-  //AX_.setMotorPWM(0,0);
-  //AX_.setMotorPWM(1,0);
+  AX_.setMotorPWM(0,0);
+  AX_.setMotorPWM(1,0);
   timerPulse_.disable();
   isInPulse_ = false;
 }
