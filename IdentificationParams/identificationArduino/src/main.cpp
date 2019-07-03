@@ -83,7 +83,7 @@ void setup() {
     pid_.setCommandFunc(PIDcommand);
     pid_.setAtGoalFunc(PIDgoalReached);
   pid_.setEpsilon(0.001);
-  pid_.setPeriod(10);
+  pid_.setPeriod(200);
 }
 
 /* Boucle principale (infinie)*/
@@ -118,16 +118,16 @@ void startPulse(){
   timerPulse_.setDelay(pulseTime_);
   timerPulse_.enable();
   timerPulse_.setRepetition(1);
-  AX_.setMotorPWM(0, pulsePWM_);
-  AX_.setMotorPWM(1, pulsePWM_);
+  //AX_.setMotorPWM(0, pulsePWM_);
+  //AX_.setMotorPWM(1, pulsePWM_);
   shouldPulse_ = false;
   isInPulse_ = true;
 }
 
 void endPulse(){
   /* Rappel du chronometre */
-  AX_.setMotorPWM(0,0);
-  AX_.setMotorPWM(1,0);
+  //AX_.setMotorPWM(0,0);
+  //AX_.setMotorPWM(1,0);
   timerPulse_.disable();
   isInPulse_ = false;
 }
@@ -141,7 +141,7 @@ void sendMsg(){
   doc["potVex"] = analogRead(POTPIN);
   doc["encVex"] = vexEncoder_.getCount();
   doc["goal"] = pid_.getGoal();
-  doc["motorPos"] = PIDmeasurement();
+  doc["measurements"] = PIDmeasurement();
   doc["voltage"] = AX_.getVoltage();
   doc["current"] = AX_.getCurrent(); 
   doc["pulsePWM"] = pulsePWM_;
@@ -154,6 +154,7 @@ void sendMsg(){
   doc["gyroY"] = imu_.getGyroY();
   doc["gyroZ"] = imu_.getGyroZ();
   doc["isGoal"] = pid_.isAtGoal();
+  doc["actualTime"] = pid_.getActualDt();
 
   // Serialisation
   serializeJson(doc, Serial);
@@ -193,13 +194,20 @@ void readMsg(){
   if(!parse_msg.isNull()){
      shouldPulse_ = doc["pulse"];
   }
+  parse_msg = doc["setGoal"];
+  if(!parse_msg.isNull()){
+    pid_.disable();
+    pid_.setGains(doc["setGoal"][0], doc["setGoal"][1], doc["setGoal"][2]);
+    pid_.setEpsilon(doc["setGoal"][3]);
+    pid_.setGoal(doc["setGoal"][4]);
+    pid_.enable();
+  }
 }
 
 
 // Fonctions pour le PID
 double PIDmeasurement(){
   // To do
-  return 0;
 }
 void PIDcommand(double cmd){
   // To do
