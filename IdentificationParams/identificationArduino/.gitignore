@@ -1,7 +1,0 @@
-/.vscode/*
-!/.vscode/tasks.json 
-
-/.travis.yml
-/.DS_Store
-/build/
-/downloadedLibraries/
